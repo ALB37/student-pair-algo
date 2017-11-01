@@ -69,11 +69,7 @@ console.log(pairs);
 let newHist = pairHist.concat(pairs);
 localStorage.pairHist = JSON.stringify(newHist);
 
-// for(let i in pairs) {
-// }
-$('ol').append(`${pairs[0][0]} ${pairs[0][1]}`);
-$('ol').append(`${pairs[1][0]} ${pairs[1][1]}`);
-$('ol').append(`${pairs[2][0]} ${pairs[2][1]}`);
-$('ol').append(`${pairs[3][0]} ${pairs[3][1]}`);
-$('ol').append(`${pairs[4][0]} ${pairs[4][1]}`);
-$('ol').append(`${pairs[5][0]} ${pairs[5][1]}`);
+for (let i in pairs) {
+$('ol').append(`<li>${pairs[i][0]}, ${pairs[i][1]}</li>`);
+
+}
