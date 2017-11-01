@@ -31,6 +31,9 @@ let pairs = [];
 let pairHist = [];
 if (localStorage.pairHist) {
   pairHist = JSON.parse(localStorage.pairHist);
+  if (pairHist.length > 120){
+    localStorage.clear();
+  }
 }
 
 let randomFun = function(){
@@ -70,6 +73,6 @@ let newHist = pairHist.concat(pairs);
 localStorage.pairHist = JSON.stringify(newHist);
 
 for (let i in pairs) {
-$('ol').append(`<li>${pairs[i][0]}, ${pairs[i][1]}</li>`);
+$('ul').append(`<li>${pairs[i][0]}, ${pairs[i][1]}</li>`);
 
 }
