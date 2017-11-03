@@ -39,8 +39,22 @@ const factorial = function(num){
 // Check if number of students in class is odd or even, and return an even num
 const parity = students.length % 2 === 0 ? students.length : students.length - 1;
 
+
 // Calculate the possible number of unique pairs for a given class
 const totalCombinations = factorial(parity) / (2 * factorial(parity - 2));
+
+const possibleStudentPairs = [];
+
+for (let i = 0; i < students.length - 1; i++){
+  for (let j = i + 1; j < students.length; j++){
+    let workingArr = [];
+    workingArr.push(students[i]);
+    workingArr.push(students[j]);
+    possibleStudentPairs.push(workingArr);
+  }
+}
+
+
 
 // Define the array of students which we will return at the end.
 const pairs = [];
