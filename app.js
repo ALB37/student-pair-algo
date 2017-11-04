@@ -37,46 +37,94 @@ const factorial = function(num){
 };
 
 // Check if number of students in class is odd or even, and return an even num
-const parity = students.length % 2 === 0 ? students.length : students.length - 1;
-
+// const parity = students.length % 2 === 0 ? students.length : students.length - 1;
 
 // Calculate the possible number of unique pairs for a given class
-const totalCombinations = factorial(parity) / (2 * factorial(parity - 2));
+// const totalCombinations = factorial(parity) / (2 * factorial(parity - 2));
 
-const possibleStudentPairs = [];
-
-for (let i = 0; i < students.length - 1; i++){
-  for (let j = i + 1; j < students.length; j++){
-    let workingArr = [];
-    workingArr.push(students[i]);
-    workingArr.push(students[j]);
-    possibleStudentPairs.push(workingArr);
-  }
-}
-
-
+// Define an array of possible pairs that can exist
+let possibleStudentPairs = [];
 
 // Define the array of students which we will return at the end.
 const pairs = [];
 
-// Check if there is localStorage
-if (!localStorage.fruitBasket){
-  // If there isn't any localStorage, scramble the array of students and store that scrambled array in localStorage for future retrieval.
+// Random number generator
+let randomFun = function(){
+  return Math.floor(Math.random() * possibleStudentPairs.length);
+};
 
+// Generate all possible pairs
+let generateAllPairs = function(){
+  for (let i = 0; i < students.length - 1; i++){
+    for (let j = i + 1; j < students.length; j++){
+      let workingArr = [];
+      workingArr.push(students[i]);
+      workingArr.push(students[j]);
+      possibleStudentPairs.push(workingArr);
+    }
+  }
+};
+
+// Bring in pair history or create it if needed
+if (!localStorage.fruitBasket || JSON.parse(localStorage.fruitBasket).length === 0){
+  generateAllPairs();
 } else {
   // Load the previously scrambled array of students, and retrieve which iteration of the algorithm we are on.
+  possibleStudentPairs = JSON.parse(localStorage.fruitBasket);
 }
 
-/////////////////////////////////////
-// Algorithm for generating pairs. //
-/////////////////////////////////////
+////////////////////////////////////
+// Algorithm for generating pairs //
+////////////////////////////////////
+
+const numOfPairs = students.length % 2 === 0 ? students.length / 2 : (students.length - 1) / 2;
+
+for (let i = 0; i < numOfPairs; i++){
+  let randomIndex = randomFun();
+  let workingPair = possibleStudentPairs[randomIndex];
+  if (pairs.length === 0){
+    pairs.push(workingPair);
+    possibleStudentPairs.splice(randomIndex, 1);
+  } else {
+    let used = false;
+    for (let j = 0; j < pairs.length; j++){
+      if (pairs[j].includes(workingPair[0]) || pairs[j].includes(workingPair[1])){
+        i--;
+        used = true;
+        break;
+      }
+      if (!used) {
+        pairs.push(workingPair);
+        possibleStudentPairs.splice(randomIndex, 1);
+      }
+    }
+  }
+}
+
+if (students.length % 2 !== 0){
+  for (let i = 0; i < students.length; i++){
+    let studentUsed = false;
+    for (let j = 0; j < pairs.length; j++){
+      if (pairs[j].includes(students[i])){
+        studentUsed = true;
+        break;
+      }
+    }
+    if (!studentUsed){
+      pairs[pairs.length - 1].push(students[i]);
+      break;
+    }
+  }
+}
+
+localStorage.fruitBasket = JSON.stringify(possibleStudentPairs);
+
+for (let i in pairs) {
+  $('ul').append(`<li>${pairs[i][0]}, ${pairs[i][1]}</li>`);
+}
+
 
 // There will basically be number of students minus 1 combinations of pairs. Figure out how to algorithmically generate all of the possible combinations. Then assign each set an integer, and return the set based on the integer given as input. If there is an odd number of students, throw that remaining student into a random pair. Then increment that integer and store to localStorage.
-
-
-
-
-
 
 // Old Code: if we can get the above working, consider deleting what we don't need from below vvvvv
 
@@ -85,9 +133,6 @@ if (!localStorage.fruitBasket){
 //   pairHist = JSON.parse(localStorage.pairHist);
 // }
 //
-// let randomFun = function(){
-//   return Math.floor(Math.random() * students.length);
-// };
 //
 // let pears = function(currentPos){
 //   let currentPair = [];
@@ -121,6 +166,3 @@ if (!localStorage.fruitBasket){
 // let newHist = pairHist.concat(pairs);
 // localStorage.pairHist = JSON.stringify(newHist);
 //
-// for (let i in pairs) {
-//   $('ol').append(`<li>${pairs[i][0]}, ${pairs[i][1]}</li>`);
-// }
