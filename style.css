@@ -1,0 +1,13 @@
+body {
+  background-color: cornsilk;
+  color: darkSlateGray;
+  text-align: center;
+  font-family: 'Poiret One', cursive;
+  font-size: 2em;
+  border: 2px dashed black;
+}
+
+ul {
+  /*list-style-position: inside;*/
+  padding-left: 0;
+}
